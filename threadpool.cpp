@@ -46,6 +46,7 @@ QThread* ThreadPool::getThread(int* threadIdPtr){
         }
         status[minUseableId] = STATUS_USING;   //将状态置为使用中
         *threadIdPtr = minUseableId;  //传出线程Id
+        qDebug()<<"departing threadId:"<<*threadIdPtr;
         while(++minUseableId<maxThreadNum){
             if(status[minUseableId]==STATUS_UNMALLOC||status[minUseableId]==STATUS_UNUSE){    //找到下一个可用的线程号
                 break;

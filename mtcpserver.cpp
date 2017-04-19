@@ -22,6 +22,7 @@ void MTcpServer::incomingConnection(int socketDescriptor){
         return ;
     }
     newsocket->moveToThread(sockThread);    //将要进行的网络操作转给新线程
+    connect(newsocket,SIGNAL(mDealingRequest(QString,int,int,QString,QString)),this,SLOT(mRecvDealInfo(QString,int,int,QString,QString)));
     connect(newsocket,SIGNAL(readyRead()),newsocket,SLOT(response()));  //待接收数据已准备好,由response函数处理请求
     connect(sockThread, SIGNAL(finished()),newsocket, SLOT(deleteLater())); //线程结束后回收分配的socket资源
     connect(newsocket,SIGNAL(disconnected()),newsocket,SLOT(sendmDis()));   //连接关闭信号和MTcpSocket的sendmDis槽关联
@@ -35,4 +36,8 @@ void MTcpServer::incomingConnection(int socketDescriptor){
 void MTcpServer::recoverThread(int threadId){
     qDebug("recover thread id:%d",threadId);
     tpool->recoverThread(threadId);
+}
+
+void MTcpServer::mRecvDealInfo(QString reqIp, int reqPost, int threadId, QString requestHttp, QString responseHttp){
+    emit mPassDetailToWindow(reqIp,reqPost,threadId,requestHttp,responseHttp);
 }

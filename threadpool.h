@@ -1,6 +1,7 @@
 #ifndef THREADPOOL_H
 #define THREADPOOL_H
 #include <QThread>
+#include <QDebug>
 #define STATUS_UNMALLOC 'C'
 #define STATUS_UNUSE 'E'
 #define STATUS_USING 'G'

@@ -20,6 +20,7 @@ MTcpSocket::~MTcpSocket(){
  */
 void MTcpSocket::response(){
     QString* ConType;
+    QString* ReString;
     QByteArray* data;
     QByteArray* sendmsg;
     QByteArray recvmsg = this->readAll();   //读取请求数据
@@ -33,24 +34,30 @@ void MTcpSocket::response(){
     if(CheckUrl(HeadAttr->at(ATTR_GET))){
         data = GetRequestContent(HeadAttr->at(ATTR_GET));
         if(data==NULL){
-            QString ReString = QString("HTTP/1.1 404 Not Found\r\nServer: Lty's Server V1.0\r\nConnection: close\r\n\r\n");
-            qDebug() << ReString;
-            this->write(ReString.toUtf8());
+            ReString = new QString("HTTP/1.1 404 Not Found\r\nServer: Lty's Server V1.0\r\nConnection: close\r\n\r\n");
+            qDebug() << ReString->toUtf8().data();
+            this->write(ReString->toUtf8());
             this->flush();
+            this->close();
         }else{
             ConType = GetConType(HeadAttr->at(ATTR_GET));
-            QString ReString = QString("HTTP/1.1 200 OK\r\nServer: Lty's Server V1.0\r\nAccept-Ranges: bytes\r\nContent-Length: %1\r\nConnection: close\r\nContent-Type: %2\r\n\r\n").arg(data->length()).arg(*ConType);
-            sendmsg = new QByteArray(ReString.toUtf8());
+            ReString = new QString(QString("HTTP/1.1 200 OK\r\nServer: Lty's Server V1.0\r\nAccept-Ranges: bytes\r\nContent-Length: %1\r\nConnection: close\r\nContent-Type: %2\r\n\r\n").arg(data->length()).arg(*ConType));
+            sendmsg = new QByteArray(ReString->toUtf8());
             sendmsg->append(*data);
             qDebug()<<sendmsg->data();
             this->write(*sendmsg);
             this->flush();
         }
     }else{
+        ReString = new QString("HTTP/1.1 404 Not Found\r\nServer: Lty's Server V1.0\r\nConnection: close\r\n\r\n");
+        qDebug() << ReString->toUtf8().data();
+        this->write(ReString->toUtf8());
+        this->flush();
+        this->close();
         qDebug() << QString("Illegal Url").toUtf8();
         this->close();
     }
-
+    emit mDealingRequest(this->peerAddress().toString(),this->peerPort(),threadId,QString(recvmsg),*ReString);
 }
 
 /**

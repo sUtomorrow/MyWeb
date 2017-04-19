@@ -15,6 +15,9 @@ protected:
     void incomingConnection(int socketDescriptor);
 public slots:
     void recoverThread(int threadId);
+    void mRecvDealInfo(QString reqIp,int reqPost,int threadId,QString requestHttp,QString responseHttp);
+signals:
+    void mPassDetailToWindow(QString reqIp,int reqPost,int threadId,QString requestHttp,QString responseHttp);
 };
 
 #endif // MTCPSERVER_H

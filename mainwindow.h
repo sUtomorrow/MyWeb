@@ -22,6 +22,7 @@ private slots:
     void startServer();
     void closeServer();
     void selectRootDir();
+    void showRunningInfo(QString reqIp,int reqPost,int threadId,QString requestHttp,QString responseHttp);
 };
 
 #endif // MAINWINDOW_H

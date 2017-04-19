@@ -1,6 +1,7 @@
 #ifndef MTCPSOCKET_H
 #define MTCPSOCKET_H
 #include<QtNetwork/QTcpSocket>
+#include<QHostAddress>
 #include<QRegExp>
 #include<QStringList>
 #include<QFile>
@@ -26,6 +27,7 @@ public slots:
     void sendmDis();
 signals:
     void mDisconnect(int);  //tcp链接已断开时发送此信号，在主线程中接收，传递当前连接的子线程在线程池中的编号，以便回收线程资源。
+    void mDealingRequest(QString reqIp,int reqPost,int threadId,QString requestHttp,QString responseHttp);
 };
 
 #endif // MTCPSOCKET_H

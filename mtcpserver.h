@@ -8,7 +8,8 @@ class MTcpServer:public QTcpServer{
     Q_OBJECT
 public:
     ThreadPool* tpool;
-    MTcpServer(int maxThreadNum);
+    QString* rootDirPath;
+    MTcpServer(int maxThreadNum,QString rootDirPath);
     ~MTcpServer();
 protected:
     void incomingConnection(int socketDescriptor);

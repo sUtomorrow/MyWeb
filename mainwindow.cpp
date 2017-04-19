@@ -17,7 +17,7 @@ MainWindow::~MainWindow(){
  * @brief MainWindow::startServer 启动服务器按钮对应操作
  */
 void MainWindow::startServer(){
-    tcpserver = new MTcpServer(ui->ThreadNumEdit->text().toInt());
+    tcpserver = new MTcpServer(ui->ThreadNumEdit->text().toInt(),ui->RootDirEdit->text());
     QString Addr = QString("%1.%2.%3.%4").arg(ui->IPEdit1->text()).arg(ui->IPEdit2->text()).arg(ui->IPEdit3->text()).arg(ui->IPEdit4->text());
     this->tcpserver->listen(QHostAddress(Addr),ui->ListenPortEdit->text().toInt());
     ui->CloseServiceBtn->setEnabled(true);

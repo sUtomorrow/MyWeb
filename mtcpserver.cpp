@@ -1,10 +1,12 @@
 #include "mtcpserver.h"
 
-MTcpServer::MTcpServer(int maxThreadNum):QTcpServer(){
+MTcpServer::MTcpServer(int maxThreadNum,QString rootDirPath):QTcpServer(){
     tpool = new ThreadPool(maxThreadNum);
+    this->rootDirPath = new QString(rootDirPath);
 }
 
 MTcpServer::~MTcpServer(){
+    delete rootDirPath;
     delete tpool;
 }
 /**
@@ -12,7 +14,7 @@ MTcpServer::~MTcpServer(){
  * @param socketDescriptor  新连接建立的QTcpSocket描述
  */
 void MTcpServer::incomingConnection(int socketDescriptor){
-    MTcpSocket* newsocket = new MTcpSocket(socketDescriptor,0);
+    MTcpSocket* newsocket = new MTcpSocket(socketDescriptor,*(this->rootDirPath));
     QThread* sockThread = tpool->getThread(&(newsocket->threadId)); //从线程池中取出一个可用线程
     if(sockThread==NULL){   //取出线程失败
         qDebug("线程池已枯竭!");

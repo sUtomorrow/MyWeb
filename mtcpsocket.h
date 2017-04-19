@@ -3,6 +3,7 @@
 #include<QtNetwork/QTcpSocket>
 #include<QRegExp>
 #include<QStringList>
+#include<QFile>
 #include<qdebug.h>
 #define ATTR_GET 0
 #define ATTR_CONNECTION 1
@@ -12,9 +13,13 @@ class MTcpSocket:public QTcpSocket{
     Q_OBJECT
 public:
     int threadId;
-    MTcpSocket(qintptr socketDescriptor,int threadId);
+    QString* rootDirPath;
+    MTcpSocket(qintptr socketDescriptor,QString rootDirPath);
+    ~MTcpSocket();
     QStringList* GetUrlFrom(QString HttpHeader);
+    QString* GetConType(QString Url);
     bool CheckUrl(QString Url);
+    QByteArray* GetRequestContent(QString Url);
 //    QString DecodeHttp(QString httpCon);
 public slots:
     void response();

@@ -4,8 +4,10 @@
 MainWindow::MainWindow(QWidget *parent) :QMainWindow(parent),ui(new Ui::MainWindow){
     ui->setupUi(this);
     ui->CloseServiceBtn->setEnabled(false);
+    ui->RootDirEdit->setEnabled(false);
     connect(ui->StartServiceBtn,SIGNAL(clicked()),this,SLOT(startServer()));
     connect(ui->CloseServiceBtn,SIGNAL(clicked()),this,SLOT(closeServer()));
+    connect(ui->SelectRootDirBtn,SIGNAL(clicked()),this,SLOT(selectRootDir()));
 }
 
 MainWindow::~MainWindow(){
@@ -20,13 +22,13 @@ void MainWindow::startServer(){
     this->tcpserver->listen(QHostAddress(Addr),ui->ListenPortEdit->text().toInt());
     ui->CloseServiceBtn->setEnabled(true);
     ui->StartServiceBtn->setEnabled(false);
+    ui->SelectRootDirBtn->setEnabled(false);
     ui->IPEdit1->setEnabled(false);
     ui->IPEdit2->setEnabled(false);
     ui->IPEdit3->setEnabled(false);
     ui->IPEdit4->setEnabled(false);
     ui->ThreadNumEdit->setEnabled(false);
     ui->ListenPortEdit->setEnabled(false);
-    ui->RootDirEdit->setEnabled(false);
 }
 /**
  * @brief MainWindow::closeServer 关闭服务器按钮对应操作
@@ -36,13 +38,21 @@ void MainWindow::closeServer(){
     delete this->tcpserver;
     ui->StartServiceBtn->setEnabled(true);
     ui->CloseServiceBtn->setEnabled(false);
+    ui->SelectRootDirBtn->setEnabled(true);
     ui->IPEdit1->setEnabled(true);
     ui->IPEdit2->setEnabled(true);
     ui->IPEdit3->setEnabled(true);
     ui->IPEdit4->setEnabled(true);
     ui->ThreadNumEdit->setEnabled(true);
     ui->ListenPortEdit->setEnabled(true);
-    ui->RootDirEdit->setEnabled(true);
 }
 
-
+void MainWindow::selectRootDir(){
+    QDir curRootDir;
+    if(!curRootDir.exists(ui->RootDirEdit->text())){
+        curRootDir.mkdir(ui->RootDirEdit->text());
+    }
+    QString rootPath = QFileDialog::getExistingDirectory(this,QString("选择网站根目录"),ui->RootDirEdit->text());
+    if(!rootPath.isEmpty())
+        ui->RootDirEdit->setText(rootPath);
+}

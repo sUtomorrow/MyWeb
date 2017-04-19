@@ -182,7 +182,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>./</string>
+     <string>D:/D_Desktop/www</string>
     </property>
    </widget>
    <widget class="QPushButton" name="SelectRootDirBtn">
